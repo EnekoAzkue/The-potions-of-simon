@@ -42,6 +42,19 @@ function App() {
     }
   ]
 
+  const minNumber = 0;
+  const maxNumber = 3;
+  const speedGame = 400;
+
+  const [sequence, setSecuence] = useState([]);
+  const [currentGame, setCurrentGame] = useState([]);
+  const [isAllowedToPlay, setIsAllowedToPlay] = useState(false);
+  const [speed, setSpeed] = useState(speedGame);
+  const [turn, setTurn] = useState(0);
+  const [pulses, setPulses] = useState(0);
+  const [success, setSuccess] = useState(0);
+  const [isGameOn, setIsGameOn] = useState(false);
+
   return (
     <>
     {
@@ -78,35 +91,6 @@ function App() {
   </>
 )
 
-
-
-}
-
-  const minNumber = 0;
-  const maxNumber = 3;
-  const speedGame = 400;
-
-  const [sequence, setSecuence] = useState([]);
-  const [currentGame, setCurrentGame] = useState([]);
-  const [isAllowedToPlay, setIsAllowedToPlay] = useState(false);
-  const [speed, setSpeed] = useState(speedGame);
-  const [turn, setTurn] = useState(0);
-  const [pulses, setPulses] = useState(0);
-  const [success, setSuccess] = useState(0);
-  const [isGameOn, setIsGameOn] = useState(false);
-
-
-  const initGame = () => {
-    randomNumber();
-    setIsGameOn(true);
-  }
-
-  const randomNumber = () => {
-    setIsAllowedToPlay(false);
-    const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
-    setSecuence([...sequence, randomNumber]);
-    setTurn(turn + 1);
-  }
 
   const handleClick = () => {
     if(isAllowedToPlay) {
@@ -177,5 +161,21 @@ function App() {
     }
     setIsAllowedToPlay(true)
   }, [sequence])
+
+
+}
+
+  const initGame = () => {
+    randomNumber();
+    setIsGameOn(true);
+  }
+
+  const randomNumber = () => {
+    setIsAllowedToPlay(false);
+    const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
+    setSecuence([...sequence, randomNumber]);
+    setTurn(turn + 1);
+  }
+
 
 export default App
