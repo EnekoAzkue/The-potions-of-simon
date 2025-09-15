@@ -23,22 +23,22 @@ function App() {
     {
       color: '#FAF303',
       ref: yellowRef,
-      sound: 'one'
+      sound: 'one',
     },
     {
       color: '#030AFA',
       ref: blueRef,
-      sound: 'two'
+      sound: 'two',
     },
     {
       color: '#FA0E03',
       ref: redRef,
-      sound: 'three'
+      sound: 'three',
     },
     {
       color: '#0AFA03',
       ref: greenRef,
-      sound: 'four'
+      sound: 'four',
     }
   ]
 
@@ -51,13 +51,21 @@ function App() {
   const [isAllowedToPlay, setIsAllowedToPlay] = useState(false);
   const [speed, setSpeed] = useState(speedGame);
   const [turn, setTurn] = useState(0);
+  const [turnRecord, setTurnRecord] = useState(0);
   const [pulses, setPulses] = useState(0);
   const [success, setSuccess] = useState(0);
   const [isGameOn, setIsGameOn] = useState(false);
+  const [isGameFinished, setIsGameFinished] = useState(false)
 
   const initGame = () => {
     randomNumber();
     setIsGameOn(true);
+  }
+
+  const endGame = () => {
+    setIsGameOn(false)
+    setIsGameFinished(false)
+
   }
 
   const randomNumber = () => {
@@ -65,15 +73,18 @@ function App() {
     const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
     setSecuence([...sequence, randomNumber]);
     setTurn(turn + 1);
+    if(turn > turnRecord) {
+      setTurnRecord(turn)
+    }
   }
 
   const handleClick = (index) => {
     if(isAllowedToPlay) {
       play({id: colors[index].sound})
-      colors[index].ref.current.style.opacity = (1);
+      colors[index].ref.current.style.filter = "brightness(1)";
       colors[index].ref.current.style.scale = (0.9);
       setTimeout(() => {
-        colors[index].ref.current.style.opacity = (0.5)
+        colors[index].ref.current.style.filter = "brightness(0.7)";
         colors[index].ref.current.style.scale = (1);
         setCurrentGame([...currentGame, index]);
         setPulses(pulses + 1);
@@ -87,13 +98,14 @@ function App() {
         setSuccess(success + 1);
       } else {
         const index = sequence[pulses -1]
-        if (index) colors[index].ref.current.style.opacity = (1);
+        if (index) colors[index].ref.current.style.filter = "brightness(1)";
         play({id: 'error'})
         setTimeout(() => {
-          if (index) colors[index].ref.current.style.opacity = (0.5);
-          setIsGameOn(false);
+          if (index) colors[index].ref.current.style.filter = "brightness(0.7)";
+                     
+          setIsGameFinished(true);
         }, speed * 2 )
-      setIsAllowedToPlay(false);
+        setIsAllowedToPlay(false);
       }
     }
   }, [pulses])
@@ -124,15 +136,20 @@ function App() {
 
   useEffect(() => {
     if(!isAllowedToPlay) {
+      setTimeout(() => {
       sequence.map((item, index) => {
         setTimeout(() => {
           play({id: colors[item].sound})
-          colors[item].ref.current.style.opacity = (1)
+          colors[item].ref.current.style.filter = "brightness(1)";
+
           setTimeout(() => {
-            colors[item].ref.current.style.opacity = (0.5);
+            colors[item].ref.current.style.filter = "brightness(0.7)";
+
           }, speed / 2 )
         }, speed * index)
       })
+    }, 500);
+
     }
     setIsAllowedToPlay(true);
   }, [sequence])
@@ -140,11 +157,12 @@ function App() {
   return (
     <>
     {
-    isGameOn
+    (isGameOn && !isGameFinished)
     ?
     <>
+    
     <div className='header'>
-      <h1>Turn {turn}</h1>
+      <h1>TURN {turn}</h1>
     </div>
       <div className='container'>
 
@@ -154,23 +172,41 @@ function App() {
             key={index}
             ref={item.ref}
             className={`pad pad-${index}`}
-            style={{backgroundColor: `${item.color}`, opacity:0.6}}
             onClick={() => handleClick(index)}
+            
           >
           </div>
         )
       }) }
       </div>
     </>
-  :
+  : 
+    <> 
+    {
+    isGameFinished && isGameOn
+    ?
+      <>
+      <div className='endScreen'>
+          <h1>GAME FINISHED</h1>
+          <h3>End turn: {turn}</h3>
+          <h3>Record: {turnRecord}</h3>
+      </div>
+      <button onClick={endGame}>CONTINUE</button>
+      </>
+    :
     <>
       <div className='header'>
-          <h1>SUPER SIMON</h1>
+          <h1>THE POTIONS OF SIMON</h1>
       </div>
       <button onClick={initGame}>START</button>
     </>
+  } 
+
+      
+    </>
   }
   </>
+
 )
 
 
