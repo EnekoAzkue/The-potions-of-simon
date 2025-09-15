@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import useSound from 'use-sound'
-import simon from './assets/sounds/sprite.mp3'
+import useSound from 'use-sound';
+import simon from './assets/sounds/sprite.mp3';
 import './App.css'
 
 function App() {
@@ -55,44 +55,19 @@ function App() {
   const [success, setSuccess] = useState(0);
   const [isGameOn, setIsGameOn] = useState(false);
 
-  return (
-    <>
-    {
-    isGameOn
-    ?
-    <>
-    <div className='header'>
-      <h1>Turn {turn}</h1>
-    </div>
-      <div className='container'>
-
-      {colors.map((item, index) => {
-        return (
-          <div
-            key={index}
-            ref={item.ref}
-            className={`pad pad-${index}`}
-            style={{backgroundColor: `${item.color}`, opacity:0.6}}
-            onClick={() => handleClick(index)}
-          >
-          </div>
-        )
-      }) }
-      </div>
-    </>
-  :
-    <>
-      <div className='header'>
-          <h1>SUPER SIMON</h1>
-      </div>
-      <button onClick={initGame}>START</button>
-    </>
+  const initGame = () => {
+    randomNumber();
+    setIsGameOn(true);
   }
-  </>
-)
 
+  const randomNumber = () => {
+    setIsAllowedToPlay(false);
+    const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
+    setSecuence([...sequence, randomNumber]);
+    setTurn(turn + 1);
+  }
 
-  const handleClick = () => {
+  const handleClick = (index) => {
     if(isAllowedToPlay) {
       play({id: colors[index].sound})
       colors[index].ref.current.style.opacity = (1);
@@ -109,7 +84,7 @@ function App() {
   useEffect(() => {
     if(pulses > 0) {
       if(Number(sequence[pulses - 1]) === Number(currentGame[pulses - 1])){
-        setSuccess[success + 1];
+        setSuccess(success + 1);
       } else {
         const index = sequence[pulses -1]
         if (index) colors[index].ref.current.style.opacity = (1);
@@ -148,7 +123,7 @@ function App() {
   }, [success])
 
   useEffect(() => {
-    if(isAllowedToPlay) {
+    if(!isAllowedToPlay) {
       sequence.map((item, index) => {
         setTimeout(() => {
           play({id: colors[item].sound})
@@ -159,23 +134,52 @@ function App() {
         }, speed * index)
       })
     }
-    setIsAllowedToPlay(true)
+    setIsAllowedToPlay(true);
   }, [sequence])
+
+  return (
+    <>
+    {
+    isGameOn
+    ?
+    <>
+    <div className='header'>
+      <h1>Turn {turn}</h1>
+    </div>
+      <div className='container'>
+
+      {colors.map((item, index) => {
+        return (
+          <div
+            key={index}
+            ref={item.ref}
+            className={`pad pad-${index}`}
+            style={{backgroundColor: `${item.color}`, opacity:0.6}}
+            onClick={() => handleClick(index)}
+          >
+          </div>
+        )
+      }) }
+      </div>
+    </>
+  :
+    <>
+      <div className='header'>
+          <h1>SUPER SIMON</h1>
+      </div>
+      <button onClick={initGame}>START</button>
+    </>
+  }
+  </>
+)
+
+
+
 
 
 }
 
-  const initGame = () => {
-    randomNumber();
-    setIsGameOn(true);
-  }
 
-  const randomNumber = () => {
-    setIsAllowedToPlay(false);
-    const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
-    setSecuence([...sequence, randomNumber]);
-    setTurn(turn + 1);
-  }
 
 
 export default App
