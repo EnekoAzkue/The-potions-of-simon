@@ -201,14 +201,14 @@ function App() {
           <h3>End turn: {turn}</h3>
           <h3>Record: {turnRecord}</h3>
       </div>
-      <button onClick={endGame}>CONTINUE</button>
+      <button onClick={endGame}>TRY AGAIN</button>
       </>
     :
     <>
       <div className='header'>
           <h1>THE POTIONS OF SIMON</h1>
       </div>
-      <button onClick={initGame}>START</button>
+      <button onClick={initGame}>ACCEPT THE CHALLENGE</button>
     </>
   } 
 
@@ -218,14 +218,6 @@ function App() {
   </>
 
 )
-
-
-
-
-
 }
-
-
-
 
 export default App
