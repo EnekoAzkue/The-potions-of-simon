@@ -65,3 +65,28 @@ h3 {
   color: white;
   margin-top: 0;
 }
+
+@property --num {
+  syntax: "<integer>";
+  initial-value: 9035228;
+  inherits: false;
+}
+
+.start {
+  transition: --num 0.25s;
+  counter-set: num var(--num);
+  font: 800 60px Georgia;
+  padding: 2rem;
+  border-radius: 5rem;
+  
+}
+
+.start::after {
+  content: counter(num, lower-alpha);
+}
+
+.start:hover {
+  --num: 17049;
+
+  cursor: pointer;
+}

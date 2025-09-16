@@ -124,7 +124,6 @@ function App() {
 
   useEffect(() => {
     if(success === sequence.length && success > 0) {
-      setIsAllowedToPlay(false)
       setSpeed(speed - sequence.length * 2);
       setTimeout(() => {
         setSuccess(0);
@@ -201,14 +200,14 @@ function App() {
           <h3>End turn: {turn}</h3>
           <h3>Record: {turnRecord}</h3>
       </div>
-      <button onClick={endGame}>TRY AGAIN</button>
+      <button className='retryButton' onClick={endGame}>TRY AGAIN</button>
       </>
     :
     <>
       <div className='header'>
           <h1>THE POTIONS OF SIMON</h1>
       </div>
-      <button onClick={initGame}>ACCEPT THE CHALLENGE</button>
+      <div className='start' onClick={initGame}></div>
     </>
   } 
 
