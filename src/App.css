@@ -44,7 +44,6 @@
 .pad-3 {
   background-image: url(./assets/images/green-potion.png);
   margin-top: 6px;
-
 }
 
 button:hover {
@@ -55,7 +54,7 @@ button:hover {
 .endScreen {
   color: red;
   font-size: xx-large;
-  margin-top: 40vh;
+  margin-top: 30vh;
 }
 
 h1 {

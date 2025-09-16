@@ -124,6 +124,7 @@ function App() {
 
   useEffect(() => {
     if(success === sequence.length && success > 0) {
+      setIsAllowedToPlay(false)
       setSpeed(speed - sequence.length * 2);
       setTimeout(() => {
         setSuccess(0);
@@ -137,21 +138,28 @@ function App() {
   useEffect(() => {
     if(!isAllowedToPlay) {
       setTimeout(() => {
-      sequence.map((item, index) => {
-        setTimeout(() => {
-          play({id: colors[item].sound})
-          colors[item].ref.current.style.filter = "brightness(1)";
+        sequence.map((item, index) => {
 
           setTimeout(() => {
-            colors[item].ref.current.style.filter = "brightness(0.7)";
+            play({id: colors[item].sound})
+            colors[item].ref.current.style.filter = "brightness(1)";
+            
+            setTimeout(() => {
+              colors[item].ref.current.style.filter = "brightness(0.7)";
+              
+              
+              
+            }, speed / 2 )
+            if(index === sequence.length - 1) {
+              setIsAllowedToPlay(true)
 
-          }, speed / 2 )
-        }, speed * index)
-      })
-    }, 500);
-
+            }
+  
+          }, speed * index)
+        })
+      }, 500);
+      
     }
-    setIsAllowedToPlay(true);
   }, [sequence])
 
   return (
@@ -173,12 +181,12 @@ function App() {
             ref={item.ref}
             className={`pad pad-${index}`}
             onClick={() => handleClick(index)}
-            
           >
           </div>
         )
       }) }
       </div>
+      
     </>
   : 
     <> 
@@ -188,6 +196,8 @@ function App() {
       <>
       <div className='endScreen'>
           <h1>GAME FINISHED</h1>
+          <p>I knew you wouldn't last long on my witty puzzle</p>
+          <p>I dare you to try your memory once more</p>
           <h3>End turn: {turn}</h3>
           <h3>Record: {turnRecord}</h3>
       </div>
