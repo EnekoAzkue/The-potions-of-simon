@@ -74,7 +74,7 @@ function App() {
   const randomNumber = () => {
     setIsAllowedToPlay(false);
     const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
-    setSecuence([...sequence, 1]);
+    setSecuence([...sequence, randomNumber]);
     setTurn(turn + 1);
     if(turn > turnRecord) {
       setTurnRecord(turn)
