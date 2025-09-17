@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
+import CountUp from './countUp';
+import BlurText from './blurText';
+import { useInView, useMotionValue, useSpring } from 'motion/react';
 import useSound from 'use-sound';
 import simon from './assets/sounds/sprite.mp3';
 import './App.css'
@@ -71,7 +74,7 @@ function App() {
   const randomNumber = () => {
     setIsAllowedToPlay(false);
     const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
-    setSecuence([...sequence, randomNumber]);
+    setSecuence([...sequence, 1]);
     setTurn(turn + 1);
     if(turn > turnRecord) {
       setTurnRecord(turn)
@@ -193,21 +196,23 @@ function App() {
     isGameFinished && isGameOn
     ?
       <>
+      <div className='darkFilter'>
       <div className='endScreen'>
-          <h1>GAME FINISHED</h1>
+          <h1><BlurText text="GAME FINISHED" delay={450} animateBy='words' direction='top' className='endText'/></h1>
           <p>I knew you wouldn't last long on my witty puzzle</p>
           <p>I dare you to try your memory once more</p>
-          <h3>End turn: {turn}</h3>
-          <h3>Record: {turnRecord}</h3>
+          <h3>Successful turns: <CountUp from={0} to={turn - 1} separator=',' direction='up' duration={1}/></h3>
+          <h3>Record: <CountUp from={0} to={turnRecord} separator=',' direction='up' duration={1}/></h3>
       </div>
       <button className='retryButton' onClick={endGame}>TRY AGAIN</button>
+      </div>
       </>
     :
     <>
       <div className='header'>
-          <h1>THE POTIONS OF SIMON</h1>
+          <h1 className='title'>THE <span className='neon-text'>POTIONS</span> OF SIMON</h1>
       </div>
-      <div className='start' onClick={initGame}></div>
+      <button className='start' onClick={initGame}></button>
     </>
   } 
 
