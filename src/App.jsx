@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import CountUp from './countUp';
 import BlurText from './blurText';
-import { useInView, useMotionValue, useSpring } from 'motion/react';
 import useSound from 'use-sound';
 import simon from './assets/sounds/sprite.mp3';
-import './App.css'
+import './App.css';
+import GameOver from './assets/sounds/GameOver.mp3';
 
 function App() {
   const blueRef = useRef(null);
@@ -21,6 +21,9 @@ function App() {
       error: [4000, 1000]
     },
   });
+
+  const [playEnd] = useSound(GameOver)
+
 
   const colors = [
     {
@@ -107,6 +110,7 @@ function App() {
           if (index) colors[index].ref.current.style.filter = "brightness(0.7)";
                      
           setIsGameFinished(true);
+          playEnd();
         }, speed * 2 )
         setIsAllowedToPlay(false);
       }
@@ -198,7 +202,7 @@ function App() {
       <>
       <div className='darkFilter'>
       <div className='endScreen'>
-          <h1><BlurText text="GAME FINISHED" delay={450} animateBy='words' direction='top' className='endText'/></h1>
+          <h1><BlurText text="GAME FINISHED" delay={1000} animateBy='words' direction='top' className='endText'/></h1>
           <p>I knew you wouldn't last long on my witty puzzle</p>
           <p>I dare you to try your memory once more</p>
           <h3>Successful turns: <CountUp from={0} to={turn - 1} separator=',' direction='up' duration={1}/></h3>
